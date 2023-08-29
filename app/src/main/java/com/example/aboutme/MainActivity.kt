@@ -1,6 +1,6 @@
 package com.example.aboutme
 
-import android.content.Context
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -8,36 +8,44 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.view.isVisible
+import androidx.databinding.DataBindingUtil
+import com.example.aboutme.databinding.ActivityMainBinding
+
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var inputNickname : EditText
-    lateinit var doneButton : Button
-    lateinit var displayNickname : TextView
+    lateinit var binding : ActivityMainBinding
+    var myname : MyName = MyName("Rajneel", "")
+//    lateinit var inputNickname : EditText
+//    lateinit var doneButton : Button
+//    lateinit var displayNickname : TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        //setContentView(R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.myName = myname
 
-        inputNickname = findViewById(R.id.input_nickname)
-        doneButton = findViewById(R.id.btnDone)
-        displayNickname = findViewById(R.id.tvNickname)
+//        inputNickname = findViewById(R.id.input_nickname)
+//        doneButton = findViewById(R.id.btnDone)
+//        displayNickname = findViewById(R.id.tvNickname)
 
-        doneButton.setOnClickListener {
+        binding.btnDone.setOnClickListener {
             takeNickname()
         }
     }
 
     private fun takeNickname() {
 
-        if (inputNickname.text.isBlank() || inputNickname.text.isEmpty()) {
+        if (binding.inputNickname.text.isBlank() || binding.inputNickname.text.isEmpty()) {
             Toast.makeText(this, "What do your friends call you?", Toast.LENGTH_SHORT).show()
         }
         else {
-            displayNickname.text = "Hey there, ${inputNickname.text}!"
-            inputNickname.visibility = View.GONE
-            doneButton.visibility = View.GONE
+            binding.myName.nickname = binding.inputNickname.text.toString()
+            //binding.tvNickname.text = binding.myName?.nickname
+            binding.tvNickname.visibility = View.VISIBLE
+            binding.inputNickname.visibility = View.GONE
+            binding.btnDone.visibility = View.GONE
         }
 
     }
